@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Templates para Exportadoras Brasileiras | Néfi Muniz</title>
+  <meta name="description" content="Sites profissionais para exportadoras brasileiras. Templates modernos, responsivos e multilíngues para empresas que vendem para o mercado internacional.">
+  <meta property="og:title" content="Templates para Exportadoras Brasileiras">
+  <meta property="og:description" content="Sites prontos para empresas brasileiras que exportam. Design internacional, multilíngue e pronto para deploy.">
+  <meta property="og:type" content="website">
+  <style>
+    :root{
+      --bg:#f7f6f2;--surface:#ffffff;--text:#1e1d1a;--muted:#6b6a66;--line:rgba(30,29,26,.1);
+      --primary:#0d6e60;--primary-hover:#0a5549;--shadow:0 12px 40px rgba(0,0,0,.08);
+      --max:1080px;--transition:all .38s cubic-bezier(.16,1,.3,1);
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{font-family:Inter,-apple-system,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;min-height:100dvh}
+    a{text-decoration:none;color:inherit}
+    button{font:inherit;border:none;cursor:pointer;background:none}
+    .container{width:min(calc(100% - 2rem),var(--max));margin:auto}
+
+    /* HEADER */
+    header{padding:1.4rem 0;border-bottom:1px solid var(--line);background:rgba(247,246,242,.9);backdrop-filter:blur(10px);position:sticky;top:0;z-index:10}
+    .nav{display:flex;align-items:center;justify-content:space-between;gap:1rem}
+    .brand{font-weight:800;font-size:1.05rem;letter-spacing:.02em;color:var(--text)}
+    .brand span{color:var(--primary)}
+    .btn-wpp-nav{display:inline-flex;align-items:center;gap:.5rem;padding:.65rem 1.1rem;border-radius:999px;background:var(--primary);color:#fff;font-size:.88rem;font-weight:700;transition:var(--transition)}
+    .btn-wpp-nav:hover{background:var(--primary-hover);transform:translateY(-1px)}
+    .btn-wpp-nav svg{flex-shrink:0}
+
+    /* HERO */
+    .hero{padding:5rem 0 3.5rem;text-align:center}
+    .badge{display:inline-flex;align-items:center;gap:.45rem;padding:.4rem .85rem;border-radius:999px;background:rgba(13,110,96,.08);color:var(--primary);font-size:.82rem;font-weight:700;margin-bottom:1.4rem;border:1px solid rgba(13,110,96,.15)}
+    .badge::before{content:'';width:8px;height:8px;border-radius:50%;background:var(--primary);display:block}
+    h1{font-size:clamp(2.2rem,5vw,3.8rem);line-height:1;letter-spacing:-.04em;max-width:16ch;margin:0 auto .6rem}
+    h1 em{font-style:normal;color:var(--primary)}
+    .hero-sub{font-size:1.08rem;color:var(--muted);max-width:56ch;margin:0 auto 2.4rem}
+    .hero-ctas{display:flex;justify-content:center;gap:.9rem;flex-wrap:wrap}
+    .btn-primary{display:inline-flex;align-items:center;gap:.55rem;padding:1rem 1.6rem;border-radius:999px;background:var(--primary);color:#fff;font-weight:700;box-shadow:var(--shadow);transition:var(--transition)}
+    .btn-primary:hover{background:var(--primary-hover);transform:translateY(-2px)}
+    .btn-outline{display:inline-flex;align-items:center;gap:.55rem;padding:1rem 1.4rem;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--text);font-weight:600;transition:var(--transition)}
+    .btn-outline:hover{border-color:rgba(30,29,26,.22);transform:translateY(-2px)}
+
+    /* SERVICES */
+    .services{padding:2rem 0 5rem}
+    .section-label{font-size:.8rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:2rem;text-align:center}
+    .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem}
+    .card{background:var(--surface);border:1px solid var(--line);border-radius:24px;overflow:hidden;box-shadow:var(--shadow);transition:var(--transition);display:flex;flex-direction:column}
+    .card:hover{transform:translateY(-6px);box-shadow:0 22px 55px rgba(0,0,0,.11)}
+    .card-thumb{height:180px;display:flex;align-items:center;justify-content:center;font-size:3rem;position:relative;overflow:hidden}
+    .card-thumb.cafe{background:linear-gradient(135deg,#c8976a,#6b3f24 55%,#3a2010)}
+    .card-thumb.chocolate{background:linear-gradient(135deg,#af8235,#241d1f 55%,#4d3525)}
+    .card-thumb.artesanato{background:linear-gradient(135deg,#ffb347,#17a27f 52%,#157ac0)}
+    .card-thumb::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgba(0,0,0,.25))}
+    .card-tag{position:absolute;top:1rem;left:1rem;background:rgba(255,255,255,.15);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.2);color:#fff;font-size:.75rem;font-weight:700;padding:.3rem .65rem;border-radius:999px;z-index:1}
+    .card-body{padding:1.4rem;flex:1;display:flex;flex-direction:column;gap:.9rem}
+    .card-title{font-size:1.08rem;font-weight:800;line-height:1.2}
+    .card-desc{font-size:.9rem;color:var(--muted);flex:1}
+    .card-features{display:flex;flex-wrap:wrap;gap:.4rem}
+    .chip{display:inline-block;padding:.28rem .6rem;border-radius:999px;background:rgba(13,110,96,.07);color:var(--primary);font-size:.75rem;font-weight:600;border:1px solid rgba(13,110,96,.12)}
+    .card-cta{display:inline-flex;align-items:center;justify-content:center;gap:.45rem;padding:.8rem 1rem;border-radius:999px;background:var(--primary);color:#fff;font-size:.88rem;font-weight:700;transition:var(--transition);margin-top:.4rem}
+    .card-cta:hover{background:var(--primary-hover)}
+    .card-cta svg{transition:transform .25s ease}
+    .card-cta:hover svg{transform:translateX(3px)}
+
+    /* ABOUT */
+    .about{padding:4rem 0;background:var(--surface);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+    .about-inner{display:grid;grid-template-columns:1.2fr .8fr;gap:3rem;align-items:center}
+    .about h2{font-size:clamp(1.6rem,3vw,2.4rem);letter-spacing:-.03em;margin-bottom:.9rem}
+    .about p{color:var(--muted);margin-bottom:1.2rem;max-width:58ch}
+    .facts{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:1.5rem}
+    .fact{text-align:center;padding:1.1rem;background:var(--bg);border-radius:18px;border:1px solid var(--line)}
+    .fact strong{display:block;font-size:1.8rem;color:var(--primary);line-height:1}
+    .fact span{font-size:.8rem;color:var(--muted);margin-top:.3rem;display:block}
+    .about-cta-wrap{display:flex;flex-direction:column;gap:1rem;align-items:flex-start;padding:2rem;background:linear-gradient(135deg,#0d6e60,#0a5549);border-radius:24px;color:#fff}
+    .about-cta-wrap h3{font-size:1.2rem}
+    .about-cta-wrap p{font-size:.9rem;opacity:.85}
+    .btn-wpp-big{display:inline-flex;align-items:center;gap:.6rem;padding:1rem 1.4rem;border-radius:999px;background:#fff;color:var(--primary);font-weight:800;font-size:.9rem;transition:var(--transition);margin-top:.4rem}
+    .btn-wpp-big:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.15)}
+
+    /* FOOTER */
+    footer{padding:2rem 0;text-align:center}
+    .footer-inner{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
+    .footer-copy{font-size:.82rem;color:var(--muted)}
+
+    /* FLOAT */
+    .whatsapp-float{position:fixed;right:1.2rem;bottom:1.2rem;width:56px;height:56px;border-radius:50%;display:grid;place-items:center;background:#25D366;color:#fff;box-shadow:0 12px 30px rgba(37,211,102,.32);z-index:50;transition:var(--transition)}
+    .whatsapp-float:hover{transform:scale(1.08)}
+
+    /* ANIMATIONS */
+    .reveal{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s ease}
+    .reveal.visible{opacity:1;transform:none}
+    .reveal-delay-1{transition-delay:.1s}
+    .reveal-delay-2{transition-delay:.18s}
+    .reveal-delay-3{transition-delay:.26s}
+
+    @media (max-width:860px){.cards,.about-inner{grid-template-columns:1fr}.about-cta-wrap{margin-top:0}.facts{grid-template-columns:repeat(3,1fr)}}
+    @media (max-width:540px){.hero{padding:3.5rem 0 2.5rem}.hero-ctas{flex-direction:column;align-items:center}.facts{grid-template-columns:1fr 1fr}.footer-inner{flex-direction:column;text-align:center}}
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="container nav">
+      <a class="brand" href="#"><span>Néfi</span> Muniz · Dev</a>
+      <a class="btn-wpp-nav" href="https://wa.me/5577992088601" target="_blank" rel="noopener noreferrer">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.52 3.48A11.8 11.8 0 0 0 12.07 0C5.5 0 .16 5.34.16 11.91c0 2.1.55 4.16 1.58 5.98L0 24l6.3-1.65a11.9 11.9 0 0 0 5.77 1.47h.01c6.57 0 11.91-5.34 11.91-11.91 0-3.18-1.24-6.17-3.47-8.43Z"/></svg>
+        Fale conosco
+      </a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container">
+        <div class="badge">Sites para exportadoras brasileiras</div>
+        <h1>Presença digital com <em>alcance internacional.</em></h1>
+        <p class="hero-sub">Desenvolvemos sites profissionais para empresas brasileiras que exportam — com design moderno, conteúdo em 3 idiomas e estrutura pronta para capturar clientes no exterior.</p>
+        <div class="hero-ctas">
+          <a class="btn-primary" href="#modelos">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M9 9h6M9 12h6M9 15h4"/></svg>
+            Ver modelos disponíveis
+          </a>
+          <a class="btn-outline" href="https://wa.me/5577992088601" target="_blank" rel="noopener noreferrer">Solicitar orçamento</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="services" id="modelos">
+      <div class="container">
+        <p class="section-label">Modelos prontos para personalização</p>
+        <div class="cards">
+
+          <article class="card reveal">
+            <div class="card-thumb cafe">
+              <span class="card-tag">Café Premium</span>
+            </div>
+            <div class="card-body">
+              <h2 class="card-title">Serra Dourada Coffee Export</h2>
+              <p class="card-desc">Landing page para exportadoras de café specialty e premium, com posicionamento B2B voltado a torrefadores, importadores e distribuidores internacionais.</p>
+              <div class="card-features">
+                <span class="chip">PT | EN | ES</span>
+                <span class="chip">Responsivo</span>
+                <span class="chip">WhatsApp</span>
+                <span class="chip">SEO básico</span>
+              </div>
+              <a class="card-cta" href="APEX/cafe-premium-export.html" target="_blank" rel="noopener noreferrer">
+                Ver template
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </a>
+            </div>
+          </article>
+
+          <article class="card reveal reveal-delay-1">
+            <div class="card-thumb chocolate">
+              <span class="card-tag">Chocolate Artesanal</span>
+            </div>
+            <div class="card-body">
+              <h2 class="card-title">Alta Cacau Craft Export</h2>
+              <p class="card-desc">Site para exportadoras de chocolate bean-to-bar e linhas artesanais, direcionado a empórios finos, hotelaria e projetos de marca própria no exterior.</p>
+              <div class="card-features">
+                <span class="chip">PT | EN | ES</span>
+                <span class="chip">Responsivo</span>
+                <span class="chip">WhatsApp</span>
+                <span class="chip">Dark theme</span>
+              </div>
+              <a class="card-cta" href="APEX/chocolate-artesanal-export.html" target="_blank" rel="noopener noreferrer">
+                Ver template
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </a>
+            </div>
+          </article>
+
+          <article class="card reveal reveal-delay-2">
+            <div class="card-thumb artesanato">
+              <span class="card-tag">Artesanato Tropical</span>
+            </div>
+            <div class="card-body">
+              <h2 class="card-title">Tropical Raiz Export</h2>
+              <p class="card-desc">Página para exportadoras de artesanato e decoração brasileira, com foco em concept stores, resorts, distribuidores de lifestyle e gifting corporativo global.</p>
+              <div class="card-features">
+                <span class="chip">PT | EN | ES</span>
+                <span class="chip">Responsivo</span>
+                <span class="chip">WhatsApp</span>
+                <span class="chip">Cores vibrantes</span>
+              </div>
+              <a class="card-cta" href="APEX/artesanato-tropical-export.html" target="_blank" rel="noopener noreferrer">
+                Ver template
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </a>
+            </div>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <section class="about">
+      <div class="container about-inner">
+        <div class="reveal">
+          <h2>Sites que falam a língua do seu comprador internacional.</h2>
+          <p>Cada template foi pensado para o mercado B2B de exportação: linguagem comercial objetiva, estrutura de apresentação de produto e logística, e troca de idioma em tempo real sem necessidade de backend.</p>
+          <p>Os projetos são entregues como arquivo estático único, prontos para hospedar no GitHub Pages, Vercel ou qualquer servidor — sem mensalidade de plataforma.</p>
+          <div class="facts">
+            <div class="fact"><strong>3</strong><span>idiomas por página</span></div>
+            <div class="fact"><strong>100%</strong><span>HTML puro</span></div>
+            <div class="fact"><strong>0</strong><span>mensalidade</span></div>
+          </div>
+        </div>
+        <div class="about-cta-wrap reveal reveal-delay-1">
+          <h3>Precisa de um site personalizado para sua empresa?</h3>
+          <p>Adaptamos qualquer modelo com sua marca, produtos, textos e cores — ou desenvolvemos um projeto exclusivo do zero.</p>
+          <a class="btn-wpp-big" href="https://wa.me/5577992088601" target="_blank" rel="noopener noreferrer">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="#0d6e60" aria-hidden="true"><path d="M20.52 3.48A11.8 11.8 0 0 0 12.07 0C5.5 0 .16 5.34.16 11.91c0 2.1.55 4.16 1.58 5.98L0 24l6.3-1.65a11.9 11.9 0 0 0 5.77 1.47h.01c6.57 0 11.91-5.34 11.91-11.91 0-3.18-1.24-6.17-3.47-8.43Z"/></svg>
+            Fale pelo WhatsApp
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container footer-inner">
+      <p class="footer-copy">© 2026 Néfi Muniz · Desenvolvimento Web · Caculé, BA</p>
+      <a class="btn-wpp-nav" href="https://wa.me/5577992088601" target="_blank" rel="noopener noreferrer">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.52 3.48A11.8 11.8 0 0 0 12.07 0C5.5 0 .16 5.34.16 11.91c0 2.1.55 4.16 1.58 5.98L0 24l6.3-1.65a11.9 11.9 0 0 0 5.77 1.47h.01c6.57 0 11.91-5.34 11.91-11.91 0-3.18-1.24-6.17-3.47-8.43Z"/></svg>
+        +55 77 99208-8601
+      </a>
+    </div>
+  </footer>
+
+  <a class="whatsapp-float" href="https://wa.me/5577992088601" target="_blank" rel="noopener noreferrer" aria-label="Contato via WhatsApp">
+    <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor" aria-hidden="true"><path d="M20.52 3.48A11.8 11.8 0 0 0 12.07 0C5.5 0 .16 5.34.16 11.91c0 2.1.55 4.16 1.58 5.98L0 24l6.3-1.65a11.9 11.9 0 0 0 5.77 1.47h.01c6.57 0 11.91-5.34 11.91-11.91 0-3.18-1.24-6.17-3.47-8.43ZM12.08 21.8a9.9 9.9 0 0 1-5.04-1.38l-.36-.21-3.74.98 1-3.64-.24-.37a9.86 9.86 0 0 1-1.51-5.27c0-5.44 4.43-9.87 9.88-9.87 2.64 0 5.12 1.03 6.98 2.89a9.8 9.8 0 0 1 2.89 6.98c0 5.44-4.43 9.87-9.86 9.87Zm5.41-7.41c-.3-.15-1.77-.87-2.04-.97-.27-.1-.46-.15-.66.15-.2.3-.76.97-.93 1.17-.17.2-.35.22-.65.07-.3-.15-1.25-.46-2.39-1.47-.89-.79-1.49-1.76-1.66-2.06-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.08-.15-.66-1.59-.91-2.18-.24-.58-.48-.5-.66-.5h-.56c-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.48s1.07 2.88 1.22 3.08c.15.2 2.11 3.22 5.1 4.51.71.31 1.26.49 1.69.63.71.23 1.35.2 1.86.12.57-.08 1.77-.72 2.02-1.42.25-.69.25-1.29.17-1.42-.08-.12-.28-.2-.58-.35Z"/></svg>
+  </a>
+
+  <script>
+    const observer = new IntersectionObserver(entries => entries.forEach(entry => {
+      if (entry.isIntersecting) { entry.target.classList.add('visible'); observer.unobserve(entry.target); }
+    }), { threshold: .14 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>
