@@ -39,6 +39,16 @@
     .btn-primary:hover,.cta-nav:hover{transform:translateY(-2px);background:#56301b}
     .btn-secondary{border:1px solid var(--line);background:rgba(255,255,255,.5);color:var(--text)}
     .btn-secondary:hover{transform:translateY(-2px);border-color:rgba(45,32,25,.22)}
+    /* nav CTA: extra edge + shadow so it reads clearly against the light, translucent header */
+    .cta-nav{border:1px solid rgba(255,255,255,.28);box-shadow:0 10px 26px rgba(58,35,18,.42)}
+    .cta-nav:hover{box-shadow:0 14px 32px rgba(58,35,18,.52)}
+    /* MOBILE NAV TOGGLE */
+    .nav-toggle{display:none;align-items:center;justify-content:center;width:44px;height:44px;border-radius:12px;color:var(--text);flex:0 0 auto}
+    .nav-toggle:hover{background:rgba(45,32,25,.06)}
+    .nav-toggle .bar{transition:transform .3s ease,opacity .2s ease;transform-origin:center}
+    header.nav-open .nav-toggle .bar-1{transform:translateY(6px) rotate(45deg)}
+    header.nav-open .nav-toggle .bar-2{opacity:0}
+    header.nav-open .nav-toggle .bar-3{transform:translateY(-6px) rotate(-45deg)}
     .hero{padding:5.5rem 0 3.5rem}
     .hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:2rem;align-items:center}
     .eyebrow{display:inline-flex;align-items:center;gap:.5rem;padding:.45rem .85rem;border-radius:999px;background:rgba(166,106,67,.1);color:var(--primary);font-weight:700;font-size:.84rem;margin-bottom:1rem}
@@ -92,9 +102,12 @@
     .demo-body{padding:1.1rem}
     .demo-field{margin-bottom:.7rem}
     .demo-field label{display:block;font-size:.66rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:.3rem}
-    .demo-input{padding:.5rem .7rem;border-radius:10px;border:1px solid var(--line);background:rgba(120,120,120,.08);font-size:.85rem}
-    .demo-upload{display:flex;align-items:center;gap:.5rem}
-    .demo-save{margin-top:1rem;text-align:center;padding:.6rem;border-radius:999px;background:var(--primary);color:#fff;font-size:.8rem;font-weight:700}
+    .demo-input{display:block;width:100%;padding:.5rem .7rem;border-radius:10px;border:1px solid var(--line);background:rgba(120,120,120,.08);font-size:.85rem;font-family:inherit;color:inherit}
+    .demo-input:focus{outline:2px solid var(--primary);outline-offset:1px}
+    .demo-upload{display:flex;align-items:center;gap:.5rem;cursor:pointer}
+    .demo-file-input{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+    .demo-save{display:block;width:100%;margin-top:1rem;text-align:center;padding:.6rem;border-radius:999px;background:var(--primary);color:#fff;font-size:.8rem;font-weight:700;cursor:pointer}
+    .demo-save.saved{background:#2ea86b}
     .demo-sync{display:flex;flex-direction:column;align-items:center;gap:.35rem;color:var(--primary);flex:0 0 auto}
     .demo-sync svg{animation:demo-spin 6s linear infinite}
     .demo-sync span{font-size:.68rem;color:var(--muted);white-space:nowrap;text-align:center}
@@ -126,10 +139,14 @@
     .reveal.visible{opacity:1;transform:none}
     @media (max-width: 980px){
       .hero-grid,.story-grid,.shipping-grid,.contact-grid,.logistics,.products{grid-template-columns:1fr}
-      .nav{align-items:flex-start;flex-direction:column}
-      .nav-links{width:100%;justify-content:space-between}
       .hero-card{min-height:400px}
       h1{max-width:14ch}
+      .nav-toggle{display:inline-flex}
+      .nav-links{position:absolute;top:100%;left:0;right:0;flex-direction:column;align-items:stretch;gap:.3rem;background:var(--surface);border-top:1px solid var(--line);padding:1rem 1.5rem 1.5rem;max-height:0;opacity:0;overflow:hidden;transition:max-height .35s ease,opacity .25s ease;box-shadow:0 24px 40px rgba(0,0,0,.1)}
+      header.nav-open .nav-links{max-height:80vh;opacity:1;overflow-y:auto}
+      .nav-links a{padding:.75rem .1rem;border-bottom:1px solid var(--line);width:100%}
+      .lang-switch{align-self:flex-start;margin:.6rem 0}
+      .cta-nav{width:100%;margin-top:.2rem}
     }
     @media (max-width: 980px) and (min-width: 641px){
       .products{grid-template-columns:repeat(2,1fr)}
@@ -164,7 +181,7 @@
         </svg>
         <span>Serra Dourada</span>
       </a>
-      <nav class="nav-links" aria-label="Principal">
+      <nav class="nav-links" id="navLinks" aria-label="Principal">
         <a href="#story" data-i18n="navStory">História</a>
         <a href="#products" data-i18n="navProducts">Produtos</a>
         <a href="#shipping" data-i18n="navShipping">Exportação</a>
@@ -176,6 +193,13 @@
         </div>
         <a class="cta-nav" href="https://wa.me/5577992088601" target="_blank" rel="noopener noreferrer" data-i18n="navCta">Solicitar catálogo</a>
       </nav>
+      <button type="button" class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="navLinks" aria-label="Abrir menu">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true">
+          <line class="bar bar-1" x1="3" y1="6" x2="21" y2="6"/>
+          <line class="bar bar-2" x1="3" y1="12" x2="21" y2="12"/>
+          <line class="bar bar-3" x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+      </button>
     </div>
   </header>
 
@@ -313,30 +337,40 @@
           <p data-i18n="offerText">Adaptamos cores, textos, fotos e idiomas deste template para a identidade da sua marca. Escolha a versão estática, pronta e mais em conta, ou a versão com painel administrativo para você mesmo atualizar produtos, preços e fotos — sem depender de programador.</p>
         </div>
 
-        <div class="panel-demo reveal reveal-delay-1" aria-hidden="true">
+        <div class="panel-demo reveal reveal-delay-1" role="group" aria-label="Demonstração interativa do painel administrativo">
           <div class="demo-window">
             <div class="demo-bar"><span></span><span></span><span></span><em data-i18n="demoAdminLabel">painel-admin</em></div>
             <div class="demo-body">
-              <div class="demo-field"><label data-i18n="demoFieldTitle">Título do produto</label><div class="demo-input" data-i18n="demoFieldTitleVal">Café Bourbon Amarelo 250g</div></div>
-              <div class="demo-field"><label data-i18n="demoFieldPrice">Preço</label><div class="demo-input" data-i18n="demoFieldPriceVal">R$ 34,90</div></div>
-              <div class="demo-field"><label data-i18n="demoFieldPhoto">Foto</label><div class="demo-input demo-upload"><span>📷</span><span data-i18n="demoFieldPhotoVal">alterar imagem</span></div></div>
-              <div class="demo-save" data-i18n="demoSave">Salvar alterações ✓</div>
+              <div class="demo-field">
+                <label for="demoTitle" data-i18n="demoFieldTitle">Título do produto</label>
+                <input type="text" id="demoTitle" class="demo-input" data-i18n="demoFieldTitleVal" value="Café Bourbon Amarelo 250g">
+              </div>
+              <div class="demo-field">
+                <label for="demoPrice" data-i18n="demoFieldPrice">Preço</label>
+                <input type="text" id="demoPrice" class="demo-input" data-i18n="demoFieldPriceVal" value="R$ 34,90">
+              </div>
+              <div class="demo-field">
+                <label for="demoPhoto" data-i18n="demoFieldPhoto">Foto</label>
+                <label for="demoPhoto" class="demo-input demo-upload"><span aria-hidden="true">📷</span><span data-i18n="demoFieldPhotoVal">alterar imagem</span></label>
+                <input type="file" id="demoPhoto" class="demo-file-input" accept="image/*">
+              </div>
+              <button type="button" class="demo-save" id="demoSave" data-i18n="demoSave">Salvar alterações ✓</button>
             </div>
           </div>
-          <div class="demo-sync">
+          <div class="demo-sync" aria-hidden="true">
             <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M4 12a8 8 0 0 1 14-5.3M20 12a8 8 0 0 1-14 5.3M15 4v4h-4M9 20v-4h4"/></svg>
             <span data-i18n="demoSyncLabel">atualiza na hora</span>
           </div>
           <div class="demo-window">
             <div class="demo-bar"><span></span><span></span><span></span><em data-i18n="demoSiteLabel">seusite.com.br</em></div>
             <div class="demo-site-body">
-              <div class="demo-site-media"></div>
-              <strong data-i18n="demoFieldTitleVal">Café Bourbon Amarelo 250g</strong>
-              <span class="demo-site-price" data-i18n="demoFieldPriceVal">R$ 34,90</span>
+              <div class="demo-site-media" id="demoSiteMedia"></div>
+              <strong id="demoTitlePreview" data-i18n="demoFieldTitleVal">Café Bourbon Amarelo 250g</strong>
+              <span class="demo-site-price" id="demoPricePreview" data-i18n="demoFieldPriceVal">R$ 34,90</span>
             </div>
           </div>
         </div>
-        <p class="panel-demo-caption reveal reveal-delay-1" data-i18n="demoCaption">É assim que funciona o painel: seu cliente edita o conteúdo em uma tela simples, sem código, e o site é atualizado automaticamente.</p>
+        <p class="panel-demo-caption reveal reveal-delay-1" data-i18n="demoCaption">Teste você mesmo: edite os campos ao lado e veja a página mudar na hora — é assim que funciona o painel administrativo, sem precisar de programador.</p>
 
         <div class="pricing-grid reveal reveal-delay-2">
           <article class="panel price-card">
@@ -376,15 +410,20 @@
 
   <script>
     const translations = {
-      pt:{navStory:'História',navProducts:'Produtos',navShipping:'Exportação',navContact:'Contato',navCta:'Solicitar catálogo',eyebrow:'Exportação B2B de origem brasileira',heroTitle:'Cafés brasileiros premium para torrefadores globais.',heroText:'Conectamos lotes especiais, cafés certificados e private label do Brasil a importadores, redes gourmet e distribuidores que valorizam rastreabilidade, consistência e relacionamento comercial de longo prazo.',heroPrimary:'Falar com o time de exportação',heroSecondary:'Ver portfólio',statLabel:'Mercados atendidos',statText:'Suporte documental, amostras e embarque FOB ou CIF.',storyTitle:'História construída na origem.',storyIntro:'Nascemos para representar microlotes e cafés comerciais superiores com o mesmo rigor de apresentação internacional exigido por compradores B2B.',storyCard1Title:'Curadoria de fazendas',storyCard1Text:'Selecionamos produtores em Minas Gerais, Bahia e Espírito Santo, priorizando perfil sensorial estável, práticas responsáveis e disponibilidade para contratos recorrentes.',storyCard2Title:'Mentalidade de exportação',storyCard2Text:'Nossa operação foi estruturada para atender importadores, torrefadores e marcas próprias com comunicação ágil, documentação clara e cronograma confiável.',productsTitle:'Linhas para diferentes mercados.',productsIntro:'Portfólio desenhado para specialty coffee, food service premium e programas private label.',product1Name:'Premium Brazilian Coffee Beans',product1Text:'Grãos arábica selecionados com notas de chocolate, castanhas e frutas amarelas, ideais para torra de assinatura.',product2Name:'Single Origin Micro Lots',product2Text:'Microlotes rastreáveis com perfil exclusivo para compradores que buscam diferenciação sensorial e storytelling de origem.',product3Name:'Private Label Export Program',product3Text:'Programa de fornecimento para marcas próprias com suporte de embalagem, blend e planejamento de embarques recorrentes.',shippingTitle:'Logística internacional sem ruído.',shippingText:'Operamos com documentação de exportação, coordenação portuária, padrões de embalagem e acompanhamento de lead time para entregas com previsibilidade comercial.',ship1:'Incoterms FOB, CIF e negociação sob demanda.',ship2:'Suporte com amostras, laudos e fichas técnicas multilíngues.',ship3:'Consolidação para distribuidores, torrefadores e redes de varejo gourmet.',shipCard1Title:'Controle de qualidade',shipCard1Text:'Padronização de lotes, umidade monitorada e preparo para embarque de acordo com especificações do cliente.',shipCard2Title:'Atendimento comercial',shipCard2Text:'Time preparado para negociar volumes, calendário de compras e documentação para mercados exigentes.',contactTitle:'Vamos abrir sua próxima origem no Brasil.',contactIntro:'Compartilhe sua necessidade de volume, perfil de café ou projeto private label para receber uma proposta comercial objetiva.',whatsTitle:'WhatsApp comercial',whatsText:'Atendimento rápido para amostras, disponibilidade e negociação internacional.',emailTitle:'Email de exportação',emailText:'Envie briefing, mercado de destino e escopo do projeto para resposta comercial estruturada.',offerEyebrow:'Oferta comercial para este modelo',offerTitle:'Este modelo pode virar o site da sua empresa',offerText:'Adaptamos cores, textos, fotos e idiomas deste template para a identidade da sua marca. Escolha a versão estática, pronta e mais em conta, ou a versão com painel administrativo para você mesmo atualizar produtos, preços e fotos — sem depender de programador.',demoAdminLabel:'painel-admin',demoFieldTitle:'Título do produto',demoFieldTitleVal:'Café Bourbon Amarelo 250g',demoFieldPrice:'Preço',demoFieldPriceVal:'R$ 34,90',demoFieldPhoto:'Foto',demoFieldPhotoVal:'alterar imagem',demoSave:'Salvar alterações ✓',demoSyncLabel:'atualiza na hora',demoSiteLabel:'seusite.com.br',demoCaption:'É assim que funciona o painel: seu cliente edita o conteúdo em uma tela simples, sem código, e o site é atualizado automaticamente.',planStaticName:'Plano Essencial',planStaticF1:'Página única 100% responsiva — celular, tablet e computador',planStaticF2:'Conteúdo em português, inglês e espanhol',planStaticF3:'Botão de WhatsApp e formulário de contato',planStaticF4:'Você envia textos e fotos, a gente publica e hospeda',planPanelName:'Plano Profissional',planPanelF1:'Tudo do Plano Essencial',planPanelF2:'Painel administrativo próprio para editar textos, preços e fotos',planPanelF3:'Atualizações ilimitadas, sem depender de programador',planPanelF4:'Treinamento rápido de uso incluso',planFeaturedFlag:'Mais procurado',pricePeriod:'pagamento único · sem mensalidade',planCta:'Solicitar este plano',offerFoot:'Valores de referência para personalização deste modelo pronto. Fale com a gente para orçar um projeto sob medida para sua marca.'},
-      en:{navStory:'Company Story',navProducts:'Products',navShipping:'Shipping',navContact:'Contact',navCta:'Request catalog',eyebrow:'Brazilian origin export for B2B buyers',heroTitle:'Premium Brazilian coffees for global roasters.',heroText:'We connect specialty lots, certified coffees and private label programs from Brazil to importers, gourmet chains and distributors seeking traceability, consistency and long-term commercial relationships.',heroPrimary:'Talk to our export team',heroSecondary:'Explore portfolio',statLabel:'Markets served',statText:'Document support, samples, and FOB or CIF shipment coordination.',storyTitle:'A company built at origin.',storyIntro:'We were created to represent micro lots and superior commercial coffees with the same international presentation standards expected by B2B buyers.',storyCard1Title:'Farm curation',storyCard1Text:'We source from growers in Minas Gerais, Bahia and Espírito Santo, prioritizing stable sensory profiles, responsible practices and repeat-contract availability.',storyCard2Title:'Export mindset',storyCard2Text:'Our operation was built for importers, roasters and private label brands with agile communication, clear documentation and reliable schedules.',productsTitle:'Product lines for distinct markets.',productsIntro:'A portfolio shaped for specialty coffee, premium food service and private label supply programs.',product1Name:'Premium Brazilian Coffee Beans',product1Text:'Selected arabica beans with chocolate, nut and yellow fruit notes, ideal for signature roasts.',product2Name:'Single Origin Micro Lots',product2Text:'Traceable micro lots with exclusive cup profiles for buyers seeking sensory differentiation and origin storytelling.',product3Name:'Private Label Export Program',product3Text:'Supply program for private brands with support in packaging, blend development and recurring shipment planning.',shippingTitle:'International shipping with clarity.',shippingText:'We manage export documentation, port coordination, packaging standards and lead-time tracking for commercially predictable deliveries.',ship1:'FOB, CIF and tailored Incoterm structures.',ship2:'Support with samples, lab reports and multilingual technical sheets.',ship3:'Consolidation for distributors, roasters and gourmet retail chains.',shipCard1Title:'Quality control',shipCard1Text:'Lot standardization, monitored moisture levels and shipment preparation according to client specifications.',shipCard2Title:'Commercial service',shipCard2Text:'A team prepared to negotiate volumes, purchase calendars and documentation for demanding markets.',contactTitle:'Let’s unlock your next Brazilian origin.',contactIntro:'Share your volume targets, coffee profile or private label brief to receive a focused commercial proposal.',whatsTitle:'Commercial WhatsApp',whatsText:'Fast response for samples, availability and international negotiations.',emailTitle:'Export email',emailText:'Send your brief, target market and project scope for a structured commercial reply.',offerEyebrow:'Commercial offer for this template',offerTitle:'This template can become your company\'s website',offerText:'We adapt colors, copy, photos and languages of this template to your brand identity. Choose the static version — ready to launch and more affordable — or the version with an admin panel so you can update products, prices and photos yourself, with no developer needed.',demoAdminLabel:'admin-panel',demoFieldTitle:'Product title',demoFieldTitleVal:'Yellow Bourbon Coffee 250g',demoFieldPrice:'Price',demoFieldPriceVal:'R$ 34.90',demoFieldPhoto:'Photo',demoFieldPhotoVal:'change image',demoSave:'Save changes ✓',demoSyncLabel:'updates instantly',demoSiteLabel:'yourwebsite.com',demoCaption:'This is how the admin panel works: your client edits content on a simple screen, no code, and the website updates automatically.',planStaticName:'Essential Plan',planStaticF1:'Single-page site, 100% responsive — phone, tablet and desktop',planStaticF2:'Content in Portuguese, English and Spanish',planStaticF3:'WhatsApp button and contact form',planStaticF4:'You send the text and photos, we publish and host it',planPanelName:'Professional Plan',planPanelF1:'Everything in the Essential Plan',planPanelF2:'Your own admin panel to edit text, prices and photos',planPanelF3:'Unlimited updates, no developer needed',planPanelF4:'Quick usage training included',planFeaturedFlag:'Most requested',pricePeriod:'one-time payment · no monthly fee',planCta:'Request this plan',offerFoot:'Reference pricing for customizing this ready-made template. Get in touch for a custom quote for your brand.'},
-      es:{navStory:'Historia',navProducts:'Productos',navShipping:'Exportación',navContact:'Contacto',navCta:'Solicitar catálogo',eyebrow:'Exportación brasileña de origen para compradores B2B',heroTitle:'Cafés brasileños premium para tostadores globales.',heroText:'Conectamos lotes especiales, cafés certificados y programas de marca privada de Brasil con importadores, cadenas gourmet y distribuidores que valoran trazabilidad, consistencia y relaciones comerciales de largo plazo.',heroPrimary:'Hablar con el equipo de exportación',heroSecondary:'Ver portafolio',statLabel:'Mercados atendidos',statText:'Soporte documental, muestras y coordinación de embarques FOB o CIF.',storyTitle:'Una empresa construida en origen.',storyIntro:'Nacimos para representar microlotes y cafés comerciales superiores con el mismo estándar internacional de presentación que exige el comprador B2B.',storyCard1Title:'Curaduría de fincas',storyCard1Text:'Seleccionamos productores de Minas Gerais, Bahia y Espírito Santo, priorizando perfiles sensoriales estables, prácticas responsables y capacidad para contratos recurrentes.',storyCard2Title:'Mentalidad exportadora',storyCard2Text:'Nuestra operación fue diseñada para importadores, tostadores y marcas privadas con comunicación ágil, documentación clara y cronogramas confiables.',productsTitle:'Líneas para mercados distintos.',productsIntro:'Portafolio diseñado para specialty coffee, food service premium y programas de marca privada.',product1Name:'Premium Brazilian Coffee Beans',product1Text:'Granos arábica seleccionados con notas de chocolate, nueces y frutas amarillas, ideales para tostiones de autor.',product2Name:'Single Origin Micro Lots',product2Text:'Microlotes trazables con perfil exclusivo para compradores que buscan diferenciación sensorial y relato de origen.',product3Name:'Private Label Export Program',product3Text:'Programa de suministro para marcas propias con apoyo en empaque, desarrollo de blend y planificación de embarques recurrentes.',shippingTitle:'Logística internacional sin fricción.',shippingText:'Gestionamos documentación de exportación, coordinación portuaria, estándares de empaque y seguimiento de lead time para entregas con previsibilidad comercial.',ship1:'Incoterms FOB, CIF y estructuras según demanda.',ship2:'Soporte con muestras, informes y fichas técnicas multilingües.',ship3:'Consolidación para distribuidores, tostadores y cadenas gourmet.',shipCard1Title:'Control de calidad',shipCard1Text:'Estandarización de lotes, humedad monitoreada y preparación de embarque según especificaciones del cliente.',shipCard2Title:'Atención comercial',shipCard2Text:'Equipo preparado para negociar volúmenes, calendarios de compra y documentación para mercados exigentes.',contactTitle:'Abramos su próxima origen en Brasil.',contactIntro:'Comparta su objetivo de volumen, perfil de café o proyecto de marca privada para recibir una propuesta comercial clara.',whatsTitle:'WhatsApp comercial',whatsText:'Atención rápida para muestras, disponibilidad y negociación internacional.',emailTitle:'Correo de exportación',emailText:'Envíe briefing, mercado destino y alcance del proyecto para recibir una respuesta comercial estructurada.',offerEyebrow:'Oferta comercial para este modelo',offerTitle:'Este modelo puede ser el sitio de su empresa',offerText:'Adaptamos colores, textos, fotos e idiomas de esta plantilla a la identidad de su marca. Elija la versión estática, lista y más económica, o la versión con panel administrativo para actualizar usted mismo productos, precios y fotos, sin depender de un programador.',demoAdminLabel:'panel-admin',demoFieldTitle:'Título del producto',demoFieldTitleVal:'Café Bourbon Amarillo 250g',demoFieldPrice:'Precio',demoFieldPriceVal:'R$ 34,90',demoFieldPhoto:'Foto',demoFieldPhotoVal:'cambiar imagen',demoSave:'Guardar cambios ✓',demoSyncLabel:'se actualiza al instante',demoSiteLabel:'susitio.com',demoCaption:'Así funciona el panel: su cliente edita el contenido en una pantalla simple, sin código, y el sitio se actualiza automáticamente.',planStaticName:'Plan Esencial',planStaticF1:'Página única 100% responsiva — celular, tablet y computador',planStaticF2:'Contenido en portugués, inglés y español',planStaticF3:'Botón de WhatsApp y formulario de contacto',planStaticF4:'Usted envía textos y fotos, nosotros publicamos y alojamos',planPanelName:'Plan Profesional',planPanelF1:'Todo lo del Plan Esencial',planPanelF2:'Panel administrativo propio para editar textos, precios y fotos',planPanelF3:'Actualizaciones ilimitadas, sin depender de un programador',planPanelF4:'Capacitación rápida de uso incluida',planFeaturedFlag:'Más elegido',pricePeriod:'pago único · sin mensualidad',planCta:'Solicitar este plan',offerFoot:'Valores de referencia para personalizar esta plantilla lista. Hable con nosotros para cotizar un proyecto a medida para su marca.'}
+      pt:{navStory:'História',navProducts:'Produtos',navShipping:'Exportação',navContact:'Contato',navCta:'Solicitar catálogo',eyebrow:'Exportação B2B de origem brasileira',heroTitle:'Cafés brasileiros premium para torrefadores globais.',heroText:'Conectamos lotes especiais, cafés certificados e private label do Brasil a importadores, redes gourmet e distribuidores que valorizam rastreabilidade, consistência e relacionamento comercial de longo prazo.',heroPrimary:'Falar com o time de exportação',heroSecondary:'Ver portfólio',statLabel:'Mercados atendidos',statText:'Suporte documental, amostras e embarque FOB ou CIF.',storyTitle:'História construída na origem.',storyIntro:'Nascemos para representar microlotes e cafés comerciais superiores com o mesmo rigor de apresentação internacional exigido por compradores B2B.',storyCard1Title:'Curadoria de fazendas',storyCard1Text:'Selecionamos produtores em Minas Gerais, Bahia e Espírito Santo, priorizando perfil sensorial estável, práticas responsáveis e disponibilidade para contratos recorrentes.',storyCard2Title:'Mentalidade de exportação',storyCard2Text:'Nossa operação foi estruturada para atender importadores, torrefadores e marcas próprias com comunicação ágil, documentação clara e cronograma confiável.',productsTitle:'Linhas para diferentes mercados.',productsIntro:'Portfólio desenhado para specialty coffee, food service premium e programas private label.',product1Name:'Premium Brazilian Coffee Beans',product1Text:'Grãos arábica selecionados com notas de chocolate, castanhas e frutas amarelas, ideais para torra de assinatura.',product2Name:'Single Origin Micro Lots',product2Text:'Microlotes rastreáveis com perfil exclusivo para compradores que buscam diferenciação sensorial e storytelling de origem.',product3Name:'Private Label Export Program',product3Text:'Programa de fornecimento para marcas próprias com suporte de embalagem, blend e planejamento de embarques recorrentes.',shippingTitle:'Logística internacional sem ruído.',shippingText:'Operamos com documentação de exportação, coordenação portuária, padrões de embalagem e acompanhamento de lead time para entregas com previsibilidade comercial.',ship1:'Incoterms FOB, CIF e negociação sob demanda.',ship2:'Suporte com amostras, laudos e fichas técnicas multilíngues.',ship3:'Consolidação para distribuidores, torrefadores e redes de varejo gourmet.',shipCard1Title:'Controle de qualidade',shipCard1Text:'Padronização de lotes, umidade monitorada e preparo para embarque de acordo com especificações do cliente.',shipCard2Title:'Atendimento comercial',shipCard2Text:'Time preparado para negociar volumes, calendário de compras e documentação para mercados exigentes.',contactTitle:'Vamos abrir sua próxima origem no Brasil.',contactIntro:'Compartilhe sua necessidade de volume, perfil de café ou projeto private label para receber uma proposta comercial objetiva.',whatsTitle:'WhatsApp comercial',whatsText:'Atendimento rápido para amostras, disponibilidade e negociação internacional.',emailTitle:'Email de exportação',emailText:'Envie briefing, mercado de destino e escopo do projeto para resposta comercial estruturada.',offerEyebrow:'Oferta comercial para este modelo',offerTitle:'Este modelo pode virar o site da sua empresa',offerText:'Adaptamos cores, textos, fotos e idiomas deste template para a identidade da sua marca. Escolha a versão estática, pronta e mais em conta, ou a versão com painel administrativo para você mesmo atualizar produtos, preços e fotos — sem depender de programador.',demoAdminLabel:'painel-admin',demoFieldTitle:'Título do produto',demoFieldTitleVal:'Café Bourbon Amarelo 250g',demoFieldPrice:'Preço',demoFieldPriceVal:'R$ 34,90',demoFieldPhoto:'Foto',demoFieldPhotoVal:'alterar imagem',demoSave:'Salvar alterações ✓',demoSyncLabel:'atualiza na hora',demoSiteLabel:'seusite.com.br',demoCaption:'Teste você mesmo: edite os campos ao lado e veja a página mudar na hora — é assim que funciona o painel administrativo, sem precisar de programador.',demoSavedLabel:'Alterações salvas ✓',planStaticName:'Plano Essencial',planStaticF1:'Página única 100% responsiva — celular, tablet e computador',planStaticF2:'Conteúdo em português, inglês e espanhol',planStaticF3:'Botão de WhatsApp e formulário de contato',planStaticF4:'Você envia textos e fotos, a gente publica e hospeda',planPanelName:'Plano Profissional',planPanelF1:'Tudo do Plano Essencial',planPanelF2:'Painel administrativo próprio para editar textos, preços e fotos',planPanelF3:'Atualizações ilimitadas, sem depender de programador',planPanelF4:'Treinamento rápido de uso incluso',planFeaturedFlag:'Mais procurado',pricePeriod:'pagamento único · sem mensalidade',planCta:'Solicitar este plano',offerFoot:'Valores de referência para personalização deste modelo pronto. Fale com a gente para orçar um projeto sob medida para sua marca.'},
+      en:{navStory:'Company Story',navProducts:'Products',navShipping:'Shipping',navContact:'Contact',navCta:'Request catalog',eyebrow:'Brazilian origin export for B2B buyers',heroTitle:'Premium Brazilian coffees for global roasters.',heroText:'We connect specialty lots, certified coffees and private label programs from Brazil to importers, gourmet chains and distributors seeking traceability, consistency and long-term commercial relationships.',heroPrimary:'Talk to our export team',heroSecondary:'Explore portfolio',statLabel:'Markets served',statText:'Document support, samples, and FOB or CIF shipment coordination.',storyTitle:'A company built at origin.',storyIntro:'We were created to represent micro lots and superior commercial coffees with the same international presentation standards expected by B2B buyers.',storyCard1Title:'Farm curation',storyCard1Text:'We source from growers in Minas Gerais, Bahia and Espírito Santo, prioritizing stable sensory profiles, responsible practices and repeat-contract availability.',storyCard2Title:'Export mindset',storyCard2Text:'Our operation was built for importers, roasters and private label brands with agile communication, clear documentation and reliable schedules.',productsTitle:'Product lines for distinct markets.',productsIntro:'A portfolio shaped for specialty coffee, premium food service and private label supply programs.',product1Name:'Premium Brazilian Coffee Beans',product1Text:'Selected arabica beans with chocolate, nut and yellow fruit notes, ideal for signature roasts.',product2Name:'Single Origin Micro Lots',product2Text:'Traceable micro lots with exclusive cup profiles for buyers seeking sensory differentiation and origin storytelling.',product3Name:'Private Label Export Program',product3Text:'Supply program for private brands with support in packaging, blend development and recurring shipment planning.',shippingTitle:'International shipping with clarity.',shippingText:'We manage export documentation, port coordination, packaging standards and lead-time tracking for commercially predictable deliveries.',ship1:'FOB, CIF and tailored Incoterm structures.',ship2:'Support with samples, lab reports and multilingual technical sheets.',ship3:'Consolidation for distributors, roasters and gourmet retail chains.',shipCard1Title:'Quality control',shipCard1Text:'Lot standardization, monitored moisture levels and shipment preparation according to client specifications.',shipCard2Title:'Commercial service',shipCard2Text:'A team prepared to negotiate volumes, purchase calendars and documentation for demanding markets.',contactTitle:'Let’s unlock your next Brazilian origin.',contactIntro:'Share your volume targets, coffee profile or private label brief to receive a focused commercial proposal.',whatsTitle:'Commercial WhatsApp',whatsText:'Fast response for samples, availability and international negotiations.',emailTitle:'Export email',emailText:'Send your brief, target market and project scope for a structured commercial reply.',offerEyebrow:'Commercial offer for this template',offerTitle:'This template can become your company\'s website',offerText:'We adapt colors, copy, photos and languages of this template to your brand identity. Choose the static version — ready to launch and more affordable — or the version with an admin panel so you can update products, prices and photos yourself, with no developer needed.',demoAdminLabel:'admin-panel',demoFieldTitle:'Product title',demoFieldTitleVal:'Yellow Bourbon Coffee 250g',demoFieldPrice:'Price',demoFieldPriceVal:'R$ 34.90',demoFieldPhoto:'Photo',demoFieldPhotoVal:'change image',demoSave:'Save changes ✓',demoSyncLabel:'updates instantly',demoSiteLabel:'yourwebsite.com',demoCaption:'Try it yourself: edit the fields and watch the page update instantly — that\'s how the admin panel works, no developer needed.',demoSavedLabel:'Changes saved ✓',planStaticName:'Essential Plan',planStaticF1:'Single-page site, 100% responsive — phone, tablet and desktop',planStaticF2:'Content in Portuguese, English and Spanish',planStaticF3:'WhatsApp button and contact form',planStaticF4:'You send the text and photos, we publish and host it',planPanelName:'Professional Plan',planPanelF1:'Everything in the Essential Plan',planPanelF2:'Your own admin panel to edit text, prices and photos',planPanelF3:'Unlimited updates, no developer needed',planPanelF4:'Quick usage training included',planFeaturedFlag:'Most requested',pricePeriod:'one-time payment · no monthly fee',planCta:'Request this plan',offerFoot:'Reference pricing for customizing this ready-made template. Get in touch for a custom quote for your brand.'},
+      es:{navStory:'Historia',navProducts:'Productos',navShipping:'Exportación',navContact:'Contacto',navCta:'Solicitar catálogo',eyebrow:'Exportación brasileña de origen para compradores B2B',heroTitle:'Cafés brasileños premium para tostadores globales.',heroText:'Conectamos lotes especiales, cafés certificados y programas de marca privada de Brasil con importadores, cadenas gourmet y distribuidores que valoran trazabilidad, consistencia y relaciones comerciales de largo plazo.',heroPrimary:'Hablar con el equipo de exportación',heroSecondary:'Ver portafolio',statLabel:'Mercados atendidos',statText:'Soporte documental, muestras y coordinación de embarques FOB o CIF.',storyTitle:'Una empresa construida en origen.',storyIntro:'Nacimos para representar microlotes y cafés comerciales superiores con el mismo estándar internacional de presentación que exige el comprador B2B.',storyCard1Title:'Curaduría de fincas',storyCard1Text:'Seleccionamos productores de Minas Gerais, Bahia y Espírito Santo, priorizando perfiles sensoriales estables, prácticas responsables y capacidad para contratos recurrentes.',storyCard2Title:'Mentalidad exportadora',storyCard2Text:'Nuestra operación fue diseñada para importadores, tostadores y marcas privadas con comunicación ágil, documentación clara y cronogramas confiables.',productsTitle:'Líneas para mercados distintos.',productsIntro:'Portafolio diseñado para specialty coffee, food service premium y programas de marca privada.',product1Name:'Premium Brazilian Coffee Beans',product1Text:'Granos arábica seleccionados con notas de chocolate, nueces y frutas amarillas, ideales para tostiones de autor.',product2Name:'Single Origin Micro Lots',product2Text:'Microlotes trazables con perfil exclusivo para compradores que buscan diferenciación sensorial y relato de origen.',product3Name:'Private Label Export Program',product3Text:'Programa de suministro para marcas propias con apoyo en empaque, desarrollo de blend y planificación de embarques recurrentes.',shippingTitle:'Logística internacional sin fricción.',shippingText:'Gestionamos documentación de exportación, coordinación portuaria, estándares de empaque y seguimiento de lead time para entregas con previsibilidad comercial.',ship1:'Incoterms FOB, CIF y estructuras según demanda.',ship2:'Soporte con muestras, informes y fichas técnicas multilingües.',ship3:'Consolidación para distribuidores, tostadores y cadenas gourmet.',shipCard1Title:'Control de calidad',shipCard1Text:'Estandarización de lotes, humedad monitoreada y preparación de embarque según especificaciones del cliente.',shipCard2Title:'Atención comercial',shipCard2Text:'Equipo preparado para negociar volúmenes, calendarios de compra y documentación para mercados exigentes.',contactTitle:'Abramos su próxima origen en Brasil.',contactIntro:'Comparta su objetivo de volumen, perfil de café o proyecto de marca privada para recibir una propuesta comercial clara.',whatsTitle:'WhatsApp comercial',whatsText:'Atención rápida para muestras, disponibilidad y negociación internacional.',emailTitle:'Correo de exportación',emailText:'Envíe briefing, mercado destino y alcance del proyecto para recibir una respuesta comercial estructurada.',offerEyebrow:'Oferta comercial para este modelo',offerTitle:'Este modelo puede ser el sitio de su empresa',offerText:'Adaptamos colores, textos, fotos e idiomas de esta plantilla a la identidad de su marca. Elija la versión estática, lista y más económica, o la versión con panel administrativo para actualizar usted mismo productos, precios y fotos, sin depender de un programador.',demoAdminLabel:'panel-admin',demoFieldTitle:'Título del producto',demoFieldTitleVal:'Café Bourbon Amarillo 250g',demoFieldPrice:'Precio',demoFieldPriceVal:'R$ 34,90',demoFieldPhoto:'Foto',demoFieldPhotoVal:'cambiar imagen',demoSave:'Guardar cambios ✓',demoSyncLabel:'se actualiza al instante',demoSiteLabel:'susitio.com',demoCaption:'Pruébelo usted mismo: edite los campos y vea la página actualizarse al instante — así funciona el panel administrativo, sin necesitar un programador.',demoSavedLabel:'Cambios guardados ✓',planStaticName:'Plan Esencial',planStaticF1:'Página única 100% responsiva — celular, tablet y computador',planStaticF2:'Contenido en portugués, inglés y español',planStaticF3:'Botón de WhatsApp y formulario de contacto',planStaticF4:'Usted envía textos y fotos, nosotros publicamos y alojamos',planPanelName:'Plan Profesional',planPanelF1:'Todo lo del Plan Esencial',planPanelF2:'Panel administrativo propio para editar textos, precios y fotos',planPanelF3:'Actualizaciones ilimitadas, sin depender de un programador',planPanelF4:'Capacitación rápida de uso incluida',planFeaturedFlag:'Más elegido',pricePeriod:'pago único · sin mensualidad',planCta:'Solicitar este plan',offerFoot:'Valores de referencia para personalizar esta plantilla lista. Hable con nosotros para cotizar un proyecto a medida para su marca.'}
     };
+    let currentLang = 'pt';
     const applyLanguage = lang => {
+      currentLang = lang;
       document.documentElement.lang = lang === 'pt' ? 'pt-BR' : lang;
       document.querySelectorAll('[data-i18n]').forEach(el => {
         const key = el.dataset.i18n;
-        if (translations[lang][key]) el.textContent = translations[lang][key];
+        if (translations[lang][key]) {
+          if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') el.value = translations[lang][key];
+          else el.textContent = translations[lang][key];
+        }
       });
       document.querySelectorAll('[data-lang]').forEach(btn => btn.classList.toggle('active', btn.dataset.lang === lang));
     };
@@ -393,7 +432,66 @@
     document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
     const header = document.getElementById('header');
     window.addEventListener('scroll', () => header.classList.toggle('scrolled', window.scrollY > 12));
+
+    // MOBILE MENU (hamburger)
+    const navToggle = document.getElementById('navToggle');
+    const navLinks = document.getElementById('navLinks');
+    if (navToggle && navLinks) {
+      const closeMenu = () => {
+        header.classList.remove('nav-open');
+        navToggle.setAttribute('aria-expanded', 'false');
+        navToggle.setAttribute('aria-label', 'Abrir menu');
+      };
+      navToggle.addEventListener('click', () => {
+        const isOpen = header.classList.toggle('nav-open');
+        navToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+        navToggle.setAttribute('aria-label', isOpen ? 'Fechar menu' : 'Abrir menu');
+      });
+      navLinks.querySelectorAll('a').forEach(link => link.addEventListener('click', closeMenu));
+      window.addEventListener('resize', () => { if (window.innerWidth > 980) closeMenu(); });
+    }
+
+    // LIVE PANEL DEMO — client-side only, works on static hosting like GitHub Pages
+    const demoTitle = document.getElementById('demoTitle');
+    const demoPrice = document.getElementById('demoPrice');
+    const demoPhoto = document.getElementById('demoPhoto');
+    const demoTitlePreview = document.getElementById('demoTitlePreview');
+    const demoPricePreview = document.getElementById('demoPricePreview');
+    const demoSiteMedia = document.getElementById('demoSiteMedia');
+    const demoSave = document.getElementById('demoSave');
+    const DEMO_PREFIX = 'apexDemo_cafe_';
+    let demoPhotoUrl = null;
+    if (demoTitle && demoTitlePreview) demoTitle.addEventListener('input', () => { demoTitlePreview.textContent = demoTitle.value; });
+    if (demoPrice && demoPricePreview) demoPrice.addEventListener('input', () => { demoPricePreview.textContent = demoPrice.value; });
+    if (demoPhoto && demoSiteMedia) demoPhoto.addEventListener('change', () => {
+      const file = demoPhoto.files && demoPhoto.files[0];
+      if (!file) return;
+      if (demoPhotoUrl) URL.revokeObjectURL(demoPhotoUrl);
+      demoPhotoUrl = URL.createObjectURL(file);
+      demoSiteMedia.style.backgroundImage = `url(${demoPhotoUrl})`;
+      demoSiteMedia.style.backgroundSize = 'cover';
+      demoSiteMedia.style.backgroundPosition = 'center';
+    });
+    if (demoSave) demoSave.addEventListener('click', () => {
+      try {
+        if (demoTitle) localStorage.setItem(DEMO_PREFIX + 'title', demoTitle.value);
+        if (demoPrice) localStorage.setItem(DEMO_PREFIX + 'price', demoPrice.value);
+      } catch (e) {}
+      const savedLabel = (translations[currentLang] && translations[currentLang].demoSavedLabel) || 'Salvo!';
+      const originalLabel = (translations[currentLang] && translations[currentLang].demoSave) || demoSave.textContent;
+      demoSave.textContent = savedLabel;
+      demoSave.classList.add('saved');
+      setTimeout(() => { demoSave.textContent = originalLabel; demoSave.classList.remove('saved'); }, 1800);
+    });
+
     applyLanguage('pt');
+
+    try {
+      const savedTitle = localStorage.getItem(DEMO_PREFIX + 'title');
+      const savedPrice = localStorage.getItem(DEMO_PREFIX + 'price');
+      if (savedTitle && demoTitle) { demoTitle.value = savedTitle; if (demoTitlePreview) demoTitlePreview.textContent = savedTitle; }
+      if (savedPrice && demoPrice) { demoPrice.value = savedPrice; if (demoPricePreview) demoPricePreview.textContent = savedPrice; }
+    } catch (e) {}
   </script>
 </body>
 </html>
